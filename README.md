@@ -2,108 +2,187 @@
 
 ## Overview
 
-This project focuses on predicting customer spending behavior using machine learning techniques on an e-commerce dataset. The dataset contains customer demographics, purchasing behavior, session activity, engagement metrics, and customer lifetime value information.
+This project focuses on analyzing customer purchasing behavior and building a machine learning model to predict customer spending in an e-commerce environment.
 
-The goal is to build a predictive model that estimates customer spending while performing comprehensive data preprocessing and feature engineering.
+The project currently covers data cleaning, preprocessing, feature engineering, exploratory data analysis (EDA), outlier investigation, and preparation of a machine learning-ready dataset.
+
+---
+
+## Project Objective
+
+Predict the total amount spent by a customer using demographic information, purchase history, customer engagement metrics, and behavioral data.
+
+Target Variable:
+
+* `total_spend_usd`
+
+A logarithmic transformation is also applied to handle skewness:
+
+* `total_spend_log`
 
 ---
 
 ## Dataset Features
 
-The dataset includes:
+The dataset contains customer-related information including:
 
-* Customer demographics (age, country, age group)
-* Purchase history
+* Demographics
+* Purchase behavior
 * Session activity
-* Payment preferences
 * Marketing engagement
-* Customer loyalty indicators
-* Customer Lifetime Value (CLV) tier
+* Payment preferences
+* Product category preferences
+* Customer lifetime indicators
 
 ---
 
 ## Data Preprocessing
 
-### Data Cleaning
+### 1. Data Cleaning
 
-* Removed non-informative identifier columns:
+Removed non-informative identifier columns:
 
-  * Customer ID
-  * Name
-  * Email
+* Customer ID
+* Name
+* Email
 
-### Missing Value Treatment
+These columns do not contribute to customer spending prediction and may introduce noise into the model.
 
-* Categorical features were imputed using mode values.
-* Numerical features were imputed using median values after distribution analysis.
+---
 
-### Feature Engineering
+### 2. Feature Engineering
 
-Date-related columns were transformed into meaningful numerical features:
+Raw date columns were transformed into meaningful numerical features:
 
-* Customer Age (days since signup)
-* Days Since First Order
-* Days Since Last Order
-* Days Since First Session
-* Days Since Last Session
+Created Features:
+
+* `customer_age_days`
+* `days_since_first_order`
+* `days_since_last_order`
+* `days_since_first_session`
+* `days_since_last_session`
 
 Original date columns were removed after feature extraction.
 
-### Outlier Analysis
+---
 
-Outliers were investigated using boxplots and the IQR method.
+### 3. Missing Value Handling
 
-Features analyzed:
+Missing values were handled using appropriate statistical techniques:
 
+* Categorical features → Mode Imputation
+* Numerical features → Median Imputation
+
+This preserves the overall distribution while minimizing bias.
+
+---
+
+### 4. Exploratory Data Analysis (EDA)
+
+Performed:
+
+* Distribution Analysis
+* Histograms
+* Boxplots
+* Summary Statistics
+
+Features analyzed include:
+
+* Age
 * Total Orders
 * Total Spend
 * Average Order Value
+* Average Discount Percentage
 * Average Rating
 * Total Sessions
+* Customer Activity Metrics
 
-The spending distribution was found to be highly right-skewed, indicating the presence of genuine high-value customers.
+---
 
-### Target Transformation
+### 5. Outlier Analysis
 
-The target variable (`total_spend_usd`) showed significant positive skewness.
+Potential outliers were identified using:
 
-A logarithmic transformation was applied:
+* Boxplots
+* Descriptive Statistics
+* IQR-based inspection
+
+After investigation, no outliers were removed.
+
+Reason:
+
+The identified observations represented genuine customer behavior such as:
+
+* High-value customers
+* Loyal customers
+* New customers
+* Inactive customers
+
+Removing these observations would reduce the model's ability to learn meaningful business patterns.
+
+---
+
+### 6. Target Transformation
+
+The target variable exhibited strong positive skewness.
+
+To reduce skewness and improve model performance:
 
 ```python
 data['total_spend_log'] = np.log1p(data['total_spend_usd'])
 ```
 
-This helps reduce skewness and improve model performance.
-
-### Encoding
-
-* Label Encoding for ordinal and low-cardinality categorical features.
-* One-Hot Encoding for nominal categorical features such as:
-
-  * Preferred Payment Method
-  * Preferred Device for Sessions
-  * Preferred Session Source
+This transformed target will be used during model training.
 
 ---
 
-## Machine Learning Objective
+### 7. Encoding
 
-### Regression Task
+Categorical features were converted into machine-learning-friendly formats using:
 
-Predict:
+* Label Encoding
+* One-Hot Encoding
 
-* Total Customer Spending (USD)
+Features encoded include:
 
-Target Variable:
+* Country
+* Age Group
+* Payment Preferences
+* Device Preferences
+* Traffic Sources
+* Product Categories
 
-* `total_spend_log`
+---
 
-Potential Models:
+## Current Project Status
+
+### Completed
+
+* Dataset Cleaning
+* Feature Engineering
+* Missing Value Handling
+* Exploratory Data Analysis
+* Outlier Investigation
+* Categorical Encoding
+* Target Transformation
+* Feature Selection
+
+### In Progress
+
+* Train-Test Split
+* Feature Scaling
+* Model Training
+* Model Evaluation
+
+### Planned
 
 * Linear Regression
 * Random Forest Regressor
-* Gradient Boosting Regressor
-* XGBoost Regressor
+* Model Comparison
+* Hyperparameter Tuning
+* Feature Importance Analysis
+* Streamlit Web Application
+* Model Deployment
 
 ---
 
@@ -113,46 +192,23 @@ Potential Models:
 * Pandas
 * NumPy
 * Matplotlib
-* Seaborn
 * Scikit-learn
 * Google Colab
 
 ---
 
-## Current Status
-
-✅ Data Cleaning Completed
-
-✅ Missing Value Handling Completed
-
-✅ Feature Engineering Completed
-
-✅ Outlier Analysis Completed
-
-✅ Target Transformation Completed
-
-✅ Feature Encoding Completed
-
-🔄 Model Training In Progress
-
-🔄 Model Evaluation In Progress
-
-🔄 Streamlit Deployment Planned
-
----
-
 ## Future Enhancements
 
-* Train and compare multiple regression models
-* Hyperparameter tuning
-* Feature importance analysis
-* Streamlit web application
-* Model deployment
-* Customer spending forecasting dashboard
+* Customer Spending Prediction Web App
+* Customer Lifetime Value (CLV) Prediction
+* Advanced Feature Engineering
+* Model Explainability
+* Interactive Dashboard
 
 ---
 
 ## Author
 
 Abel Shibu
+
 Aspiring Data Scientist | Machine Learning Enthusiast | Cybersecurity Learner
