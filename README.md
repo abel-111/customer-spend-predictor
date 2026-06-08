@@ -1,79 +1,111 @@
-# Customer Spend Predictor
+# E-Commerce Customer Spending Prediction
 
 ## Overview
 
-Customer Spend Predictor is a machine learning project focused on preparing e-commerce customer data for predictive analytics. The project currently includes data cleaning, missing value treatment, outlier handling, and feature encoding to build a high-quality dataset for future customer spending prediction models.
+This project focuses on predicting customer spending behavior using machine learning techniques on an e-commerce dataset. The dataset contains customer demographics, purchasing behavior, session activity, engagement metrics, and customer lifetime value information.
 
-**Project Status:** 🚧 In Development
+The goal is to build a predictive model that estimates customer spending while performing comprehensive data preprocessing and feature engineering.
 
-## Features Completed
+---
 
-### Data Loading and Inspection
+## Dataset Features
 
-* Loaded the e-commerce customer dataset using Pandas.
-* Explored dataset structure, data types, and missing values.
-* Analyzed dataset dimensions and feature information.
+The dataset includes:
+
+* Customer demographics (age, country, age group)
+* Purchase history
+* Session activity
+* Payment preferences
+* Marketing engagement
+* Customer loyalty indicators
+* Customer Lifetime Value (CLV) tier
+
+---
+
+## Data Preprocessing
+
+### Data Cleaning
+
+* Removed non-informative identifier columns:
+
+  * Customer ID
+  * Name
+  * Email
 
 ### Missing Value Treatment
 
-Handled missing values using appropriate statistical methods:
+* Categorical features were imputed using mode values.
+* Numerical features were imputed using median values after distribution analysis.
 
-* Mode imputation for categorical features.
-* Median imputation for numerical features with skewed distributions.
-* Verified successful removal of missing values.
+### Feature Engineering
 
-### Data Visualization
+Date-related columns were transformed into meaningful numerical features:
 
-Performed visual analysis using:
+* Customer Age (days since signup)
+* Days Since First Order
+* Days Since Last Order
+* Days Since First Session
+* Days Since Last Session
 
-* Histograms to understand data distributions.
-* Boxplots to identify outliers in numerical features.
+Original date columns were removed after feature extraction.
 
-### Outlier Detection and Removal
+### Outlier Analysis
 
-Applied the Interquartile Range (IQR) method to detect and remove outliers from:
+Outliers were investigated using boxplots and the IQR method.
+
+Features analyzed:
 
 * Total Orders
-* Total Spend (USD)
+* Total Spend
 * Average Order Value
-* Average Rating Given
+* Average Rating
 * Total Sessions
 
-### Feature Encoding
+The spending distribution was found to be highly right-skewed, indicating the presence of genuine high-value customers.
 
-Converted categorical variables into machine-learning-friendly formats.
+### Target Transformation
 
-#### Label Encoding
+The target variable (`total_spend_usd`) showed significant positive skewness.
 
-Applied to:
+A logarithmic transformation was applied:
 
-* Name
-* Email
-* Country
-* Age Group
-* Preferred Device (Ordered)
-* Preferred Source
-* Top Category Bought
-* CLV Tier
-* Signup Date
-* First Order Date
-* Last Order Date
-* First Session Date
-* Last Session Date
+```python
+data['total_spend_log'] = np.log1p(data['total_spend_usd'])
+```
 
-#### Binary Encoding
+This helps reduce skewness and improve model performance.
 
-Applied to:
+### Encoding
 
-* Marketing Opt-In (True/False → 1/0)
+* Label Encoding for ordinal and low-cardinality categorical features.
+* One-Hot Encoding for nominal categorical features such as:
 
-#### One-Hot Encoding
+  * Preferred Payment Method
+  * Preferred Device for Sessions
+  * Preferred Session Source
 
-Applied to:
+---
 
-* Preferred Payment Method
-* Preferred Device Session
-* Preferred Source Session
+## Machine Learning Objective
+
+### Regression Task
+
+Predict:
+
+* Total Customer Spending (USD)
+
+Target Variable:
+
+* `total_spend_log`
+
+Potential Models:
+
+* Linear Regression
+* Random Forest Regressor
+* Gradient Boosting Regressor
+* XGBoost Regressor
+
+---
 
 ## Technologies Used
 
@@ -83,45 +115,44 @@ Applied to:
 * Matplotlib
 * Seaborn
 * Scikit-learn
+* Google Colab
 
-## Current Progress
+---
 
-* [x] Data Loading
-* [x] Data Inspection
-* [x] Missing Value Handling
-* [x] Data Visualization
-* [x] Outlier Detection & Removal
-* [x] Feature Encoding
-* [ ] Exploratory Data Analysis (EDA)
-* [ ] Feature Engineering
-* [ ] Model Training
-* [ ] Total Spend Prediction
-* [ ] Frontend Development
-* [ ] Deployment
+## Current Status
 
-## Future Goals
+✅ Data Cleaning Completed
 
-* Perform detailed exploratory data analysis.
-* Train regression models to predict customer spending.
-* Compare multiple machine learning algorithms.
-* Build an interactive frontend for predictions.
-* Deploy the application for public use.
+✅ Missing Value Handling Completed
 
-## Project Structure
+✅ Feature Engineering Completed
 
-```text
-Customer-Spend-Predictor/
-│
-├── data/
-├── notebooks/
-├── project1.py
-├── README.md
-├── requirements.txt
-└── models/
-```
+✅ Outlier Analysis Completed
+
+✅ Target Transformation Completed
+
+✅ Feature Encoding Completed
+
+🔄 Model Training In Progress
+
+🔄 Model Evaluation In Progress
+
+🔄 Streamlit Deployment Planned
+
+---
+
+## Future Enhancements
+
+* Train and compare multiple regression models
+* Hyperparameter tuning
+* Feature importance analysis
+* Streamlit web application
+* Model deployment
+* Customer spending forecasting dashboard
+
+---
 
 ## Author
 
-**Abel Shibu**
-
-Aspiring Data Analyst | Machine Learning Enthusiast | Cybersecurity Learner
+Abel Shibu
+Aspiring Data Scientist | Machine Learning Enthusiast | Cybersecurity Learner
