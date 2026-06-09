@@ -271,3 +271,99 @@ print(X.shape)
 print(y.shape)
 print(X.dtypes.value_counts())
 
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+"""Going to test all the training method and selecting the best"""
+
+from sklearn.linear_model import LinearRegression
+
+lr = LinearRegression()
+lr.fit(X_train_scaled, y_train)
+
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+
+y_pred = lr.predict(X_test_scaled)
+
+print("R2 Score:", r2_score(y_test, y_pred))
+print("MAE:", mean_absolute_error(y_test, y_pred))
+print("RMSE:", np.sqrt(mean_squared_error(y_test, y_pred)))
+
+from sklearn.ensemble import RandomForestRegressor
+
+rf = RandomForestRegressor(n_estimators=100, random_state=42, n_jobs=-1)
+rf.fit(X_train, y_train)  # no scaling needed
+
+y_pred_rf = rf.predict(X_test)
+
+print("R2 Score:", r2_score(y_test, y_pred_rf))
+print("MAE:", mean_absolute_error(y_test, y_pred_rf))
+print("RMSE:", np.sqrt(mean_squared_error(y_test, y_pred_rf)))
+
+print(X.columns.tolist())
+
+"""we find that avg_order_value is the leaking column.
+avg_order_value = total_spend_usd ÷ total_orders
+So the model can directly reconstruct the target from it. That's why R² is 0.9999.
+"""
+
+X = data.drop(columns=['total_spend_usd', 'total_spend_log', 'clv_tier', 'avg_order_value'])
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+lr = LinearRegression()
+lr.fit(X_train_scaled, y_train)
+
+y_pred = lr.predict(X_test_scaled)
+
+print("R2 Score:", r2_score(y_test, y_pred))
+print("MAE:", mean_absolute_error(y_test, y_pred))
+print("RMSE:", np.sqrt(mean_squared_error(y_test, y_pred)))
+
+rf = RandomForestRegressor(n_estimators=100, random_state=42, n_jobs=-1)
+rf.fit(X_train, y_train)  # no scaling needed
+
+y_pred_rf = rf.predict(X_test)
+
+print("R2 Score:", r2_score(y_test, y_pred_rf))
+print("MAE:", mean_absolute_error(y_test, y_pred_rf))
+print("RMSE:", np.sqrt(mean_squared_error(y_test, y_pred_rf)))
+
+from sklearn.ensemble import GradientBoostingRegressor
+
+gbr = GradientBoostingRegressor(n_estimators=200, learning_rate=0.05, max_depth=4, random_state=42)
+gbr.fit(X_train, y_train)
+
+y_pred_gbr = gbr.predict(X_test)
+
+print("R2 Score:", r2_score(y_test, y_pred_gbr))
+print("MAE:", mean_absolute_error(y_test, y_pred_gbr))
+print("RMSE:", np.sqrt(mean_squared_error(y_test, y_pred_gbr)))
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+importances = pd.Series(gbr.feature_importances_, index=X.columns)
+top10 = importances.sort_values(ascending=False).head(10)
+
+print(top10)
+
+top10.sort_values().plot(kind='barh', figsize=(8,5))
+plt.title('Top 10 Feature Importances - Gradient Boosting')
+plt.xlabel('Importance Score')
+plt.tight_layout()
+plt.show()
+
