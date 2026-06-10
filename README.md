@@ -196,6 +196,13 @@ To ensure realistic model evaluation:
 * Performance was re-evaluated
 
 This step significantly improved the reliability of the project.
+total_orders was also removed because it dominated feature importance (0.932),
+making all other features irrelevant to the model.
+
+has_abandoned_cart showed high feature importance (0.879) but was intentionally
+retained because it is a legitimate customer behavior feature, not derived from
+the target variable. In real business, abandoned cart behavior is a strong
+predictor of purchase intent.
 
 ---
 
@@ -300,10 +307,18 @@ Successfully built and compared multiple machine learning regression models for 
 Key achievements:
 
 * Converted raw business data into machine-learning-ready features.
-* Detected and removed a major data leakage issue.
-* Compared Linear Regression, Random Forest, and Gradient Boosting models.
+* Detected and removed data leakage from avg_order_value and total_orders.
+* Compared three regression models with the following results:
+
+| Model | R² | MAE | RMSE |
+|---|---|---|---|
+| Linear Regression | 0.866 | 0.590 | 0.825 |
+| Random Forest | 0.898 | 0.508 | 0.719 |
+| Gradient Boosting | 0.902 | 0.501 | 0.705 |
+
+* Gradient Boosting achieved the best performance with R² of 0.902.
 * Identified the most important spending-related features.
-* Established a strong foundation for future CLV prediction and deployment.
+* Saved the final model using Joblib for future deployment.
 
 ---
 
