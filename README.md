@@ -260,6 +260,12 @@ This helps explain which customer behaviors contribute most to spending predicti
 
 ✅ Feature Importance Analysis
 
+✅Model Optimization
+
+✅Hyperparameter Tuning
+
+✅Cross Validation
+
 ### Currently Working On
 
 * Model Optimization
