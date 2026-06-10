@@ -367,3 +367,68 @@ plt.xlabel('Importance Score')
 plt.tight_layout()
 plt.show()
 
+X = data.drop(columns=['total_spend_usd', 'total_spend_log', 'clv_tier', 'avg_order_value', 'total_orders'])
+# total_orders and avg_order_value are dropped to prevent data leakage.
+# avg_order_value = total_spend_usd / total_orders (directly derived from target)
+# total_orders dominates feature importance (0.93) making all other features irrelevant.
+# Dropping both results in a more honest model that learns from customer behavior
+# and demographics rather than order-based shortcuts.
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+lr = LinearRegression()
+lr.fit(X_train_scaled, y_train)
+
+y_pred = lr.predict(X_test_scaled)
+
+print("R2 Score:", r2_score(y_test, y_pred))
+print("MAE:", mean_absolute_error(y_test, y_pred))
+print("RMSE:", np.sqrt(mean_squared_error(y_test, y_pred)))
+
+rf = RandomForestRegressor(n_estimators=100, random_state=42, n_jobs=-1)
+rf.fit(X_train, y_train)  # no scaling needed
+
+y_pred_rf = rf.predict(X_test)
+
+print("R2 Score:", r2_score(y_test, y_pred_rf))
+print("MAE:", mean_absolute_error(y_test, y_pred_rf))
+print("RMSE:", np.sqrt(mean_squared_error(y_test, y_pred_rf)))
+
+gbr = GradientBoostingRegressor(n_estimators=200, learning_rate=0.05, max_depth=4, random_state=42)
+gbr.fit(X_train, y_train)
+
+y_pred_gbr = gbr.predict(X_test)
+
+print("R2 Score:", r2_score(y_test, y_pred_gbr))
+print("MAE:", mean_absolute_error(y_test, y_pred_gbr))
+print("RMSE:", np.sqrt(mean_squared_error(y_test, y_pred_gbr)))
+
+importances = pd.Series(gbr.feature_importances_, index=X.columns)
+top10 = importances.sort_values(ascending=False).head(10)
+
+print(top10)
+
+top10.sort_values().plot(kind='barh', figsize=(8,5))
+plt.title('Top 10 Feature Importances - Gradient Boosting')
+plt.xlabel('Importance Score')
+plt.tight_layout()
+plt.show()
+
+"""# has_abandoned_cart is retained despite high feature importance (0.879)
+# because it is a legitimate customer behavior feature, not derived from the target.
+# In real business, abandoned cart behavior is a strong predictor of purchase intent.
+"""
+
+import joblib
+
+joblib.dump(gbr, 'spending_model.pkl')
+print("Model saved successfully")
+
+model = joblib.load('spending_model.pkl')
+print("Model loaded successfully")
+
+joblib.dump(scaler, 'scaler.pkl')
+
