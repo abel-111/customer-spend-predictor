@@ -432,3 +432,36 @@ print("Model loaded successfully")
 
 joblib.dump(scaler, 'scaler.pkl')
 
+from sklearn.model_selection import RandomizedSearchCV
+
+param_grid = {
+    'n_estimators': [100, 200, 300],
+    'learning_rate': [0.01, 0.05, 0.1],
+    'max_depth': [3, 4, 5],
+    'min_samples_split': [2, 5, 10]
+}
+
+random_search = RandomizedSearchCV(
+    estimator=GradientBoostingRegressor(random_state=42),
+    param_distributions=param_grid,
+    n_iter=20,
+    cv=5,
+    scoring='r2',
+    random_state=42,
+    n_jobs=-1,
+    verbose=1
+)
+
+random_search.fit(X_train, y_train)
+
+print("Best Parameters:", random_search.best_params_)
+print("Best R2 Score:", random_search.best_score_)
+
+best_model = random_search.best_estimator_
+
+y_pred_best = best_model.predict(X_test)
+
+print("R2 Score:", r2_score(y_test, y_pred_best))
+print("MAE:", mean_absolute_error(y_test, y_pred_best))
+print("RMSE:", np.sqrt(mean_squared_error(y_test, y_pred_best)))
+
