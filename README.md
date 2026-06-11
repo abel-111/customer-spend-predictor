@@ -152,6 +152,7 @@ This converted categorical variables into machine-learning-friendly numerical re
 
 ## Model Development
 
+
 ### Train-Test Split
 
 * 80% Training Data
@@ -178,6 +179,20 @@ Used to capture non-linear relationships between customer behavior and spending 
 Implemented to improve predictive performance and analyze feature importance.
 
 ---
+## Model Optimization
+
+To improve model performance, RandomizedSearchCV was applied to the Gradient Boosting Regressor.
+
+Parameters tuned:
+
+* n_estimators
+* learning_rate
+* max_depth
+* min_samples_split
+
+Cross-validation was performed to identify the best combination of hyperparameters.
+
+The optimized Gradient Boosting model was selected as the final production model.
 
 ## Feature Leakage Detection
 
@@ -266,18 +281,40 @@ This helps explain which customer behaviors contribute most to spending predicti
 
 ✅Cross Validation
 
+✅ Model Optimization
+
+✅ Hyperparameter Tuning
+
+✅ Cross Validation
+
+✅ Model Serialization (Joblib)
+
+✅ Streamlit Frontend Development
+
+✅ Customer Spending Prediction Interface
+
 ### Currently Working On
-* Streamlit Web Application
+
+* Streamlit UI Improvements
+* Deployment Preparation
 
 ### Planned
 
 * Customer Lifetime Value (CLV) Prediction
-* Streamlit Web Application
-* Interactive Dashboard
-* Model Explainability (SHAP)
-* Deployment
-
+* Interactive Business Dashboard
+* SHAP Explainability
+* Cloud Deployment
 ---
+## Model Saving
+
+The final trained model was saved using Joblib.
+
+Saved files:
+
+* spending_model.pkl
+* scaler.pkl
+
+This allows the trained model to be reused without retraining and supports deployment into web applications.
 
 ## Future Enhancements
 
@@ -301,7 +338,49 @@ Build an interactive dashboard for business insights and customer analytics.
 
 Deploy the final model and application using cloud platforms.
 
+The trained model (`spending_model.pkl`) and scaler (`scaler.pkl`) were originally created using a newer version of Scikit-Learn. During deployment, version compatibility issues occurred between the training environment and the Streamlit application.
+
+To ensure stable model loading and prediction, both files were regenerated and saved using:
+
+* Scikit-Learn 1.6.1
+
+This guarantees compatibility between the training pipeline and the Streamlit application environment, preventing serialization/deserialization errors when loading the model with Joblib.
+
+Deployment files:
+
+* spending_model.pkl
+* scaler.pkl
+
+Framework versions:
+
+* Python 3.x
+* Scikit-Learn 1.6.1
+* Streamlit
+* Joblib
+
+
 ---
+## Streamlit Application
+
+A Streamlit web application was developed to allow users to predict customer spending interactively.
+
+Features:
+
+* User-friendly interface
+* Customer information input form
+* Real-time spending prediction
+* Uses the trained Gradient Boosting model
+* Supports multiple countries
+
+Users can enter customer details such as:
+
+* Age
+* Session activity
+* Marketing preferences
+* Customer history metrics
+* Country information
+
+The application returns the predicted customer spending amount instantly.
 
 ## Results
 
@@ -322,6 +401,12 @@ Key achievements:
 * Gradient Boosting achieved the best performance with R² of 0.902.
 * Identified the most important spending-related features.
 * Saved the final model using Joblib for future deployment.
+Additional Achievements:
+
+* Hyperparameter tuning performed using RandomizedSearchCV.
+* Final model exported using Joblib.
+* Streamlit application successfully integrated with the trained model.
+* End-to-end machine learning pipeline completed from preprocessing to deployment-ready prediction.
 
 ---
 
