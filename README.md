@@ -267,10 +267,7 @@ This helps explain which customer behaviors contribute most to spending predicti
 ✅Cross Validation
 
 ### Currently Working On
-
-* Model Optimization
-* Hyperparameter Tuning
-* Cross Validation
+* Streamlit Web Application
 
 ### Planned
 
