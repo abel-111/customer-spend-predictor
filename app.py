@@ -67,6 +67,5 @@ if st.button("Predict Spending"):
 
     input_df = pd.DataFrame([input_dict])
     prediction_log = model.predict(input_df)[0]
-    prediction_usd = np.expm1(prediction_log)
-
+    prediction_usd = max(0, np.expm1(prediction_log))
     st.success(f"Predicted Customer Spending: ${prediction_usd:.2f}")
