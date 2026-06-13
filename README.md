@@ -275,12 +275,6 @@ This helps explain which customer behaviors contribute most to spending predicti
 
 ✅ Feature Importance Analysis
 
-✅Model Optimization
-
-✅Hyperparameter Tuning
-
-✅Cross Validation
-
 ✅ Model Optimization
 
 ✅ Hyperparameter Tuning
@@ -342,7 +336,7 @@ The trained model (`spending_model.pkl`) and scaler (`scaler.pkl`) were original
 
 To ensure stable model loading and prediction, both files were regenerated and saved using:
 
-* Scikit-Learn 1.6.1
+* Scikit-Learn 1.9.0
 
 This guarantees compatibility between the training pipeline and the Streamlit application environment, preventing serialization/deserialization errors when loading the model with Joblib.
 
