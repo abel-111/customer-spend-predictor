@@ -356,6 +356,9 @@ Framework versions:
 ---
 ## Streamlit Application
 
+## Live Demo
+
+🚀 [Click here to try the app](https://customer-spend-predictor-fkaxtz45nken45zbnx6wgd.streamlit.app)
 A Streamlit web application was developed to allow users to predict customer spending interactively.
 
 Features:
